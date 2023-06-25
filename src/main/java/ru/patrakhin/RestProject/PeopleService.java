@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.patrakhin.RestProject.models.Person;
 import ru.patrakhin.RestProject.repositories.PeopleRepository;
+import ru.patrakhin.RestProject.util.PersonNotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,19 @@ public class PeopleService {
 
     public Person findOne(int id) {
         Optional<Person> foundPerson = peopleRepository.findById(id);
-        return foundPerson.orElse(null);
+        return foundPerson.orElseThrow(PersonNotFoundException::new);
     }
+
+    @Transactional
+    public void save(Person person){
+        enrichPerson(person);
+        peopleRepository.save(person);
+    }
+
+    private void enrichPerson(Person person) {
+        person.setCreateAT(LocalDateTime.now());
+        person.setUpdateAT(LocalDateTime.now());
+        person.setCreatedWho("ADMIN");
+    }
+
 }

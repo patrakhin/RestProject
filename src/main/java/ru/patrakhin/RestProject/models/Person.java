@@ -1,5 +1,11 @@
 package ru.patrakhin.RestProject.models;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "People")
 public class Person {
@@ -9,13 +15,28 @@ public class Person {
     private int id;
 
     @Column(name = "name")
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
     @Column(name = "age")
+    @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
     @Column(name = "email")
+    @Email
+    @NotEmpty(message = "Email should not be empty")
     private String email;
+
+    @Column(name = "created_at")
+    private LocalDateTime createAT;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updateAT;
+
+    @Column(name = "created_who")
+    @NotEmpty
+    private String createdWho;
 
     public Person() {
 
@@ -56,5 +77,29 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public LocalDateTime getCreateAT() {
+        return createAT;
+    }
+
+    public void setCreateAT(LocalDateTime createAT) {
+        this.createAT = createAT;
+    }
+
+    public LocalDateTime getUpdateAT() {
+        return updateAT;
+    }
+
+    public void setUpdateAT(LocalDateTime updateAT) {
+        this.updateAT = updateAT;
+    }
+
+    public String getCreatedWho() {
+        return createdWho;
+    }
+
+    public void setCreatedWho(String createdWho) {
+        this.createdWho = createdWho;
     }
 }
